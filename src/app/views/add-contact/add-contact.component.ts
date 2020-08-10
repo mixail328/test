@@ -122,12 +122,12 @@ export class AddContactComponent implements OnInit {
       ]),
     });
   }
-
+1
   companyFormInit(): void {
     this.newCompany = this.fb.group({
       name: [null],
       nip: [null],
-      regon: [null],
+      regon: [null, [Validators.required, this.validateRegon]],
       krs: [null],
       legalForm: [null],
       email: [null],
@@ -161,7 +161,34 @@ export class AddContactComponent implements OnInit {
     });
   }
 
- 
+  private validateRegon(control: FormControl): null | ValidationErrors {
+    if (!control.value) return null;
+    const regon: string = control.value;
+    
+    const isOnlyDigit: boolean = /^\d+$/.test(regon);  
+    if (regon.length !==9 && regon.length !== 14 && !isOnlyDigit) return { 'regonError': true };
+
+    let cd: number = 0; 
+    let w: Array<number>;
+    
+    if (regon.length === 9) {
+      w = [8, 9, 2, 3, 4, 5, 6, 7];
+    } else {
+      w = [2, 4, 8, 5, 0, 9, 7, 3, 6, 1, 2, 4, 8];
+    }
+    
+    for (var i = 0; i < regon.length-1; i++) {
+      cd += w[i] * parseInt(regon.charAt(i));
+    }
+    
+    cd %= 11;
+    
+    if (cd === 10) cd = 0;
+    
+    if (cd !== parseInt(regon.charAt(regon.length - 1)) ) return { 'regonError': true };
+  
+    return null;
+  }
 
   ngOnInit() {}
 }
