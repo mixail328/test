@@ -126,7 +126,7 @@ export class AddContactComponent implements OnInit {
   companyFormInit(): void {
     this.newCompany = this.fb.group({
       name: [null],
-      nip: [null],
+      nip: [null, [Validators.required, this.validateNip]],
       regon: [null, [Validators.required, this.validateRegon]],
       krs: [null],
       legalForm: [null],
@@ -166,27 +166,48 @@ export class AddContactComponent implements OnInit {
     const regon: string = control.value;
     
     const isOnlyDigit: boolean = /^\d+$/.test(regon);  
-    if (regon.length !==9 && regon.length !== 14 && !isOnlyDigit) return { 'regonError': true };
+    if ((regon.length !== 9 && regon.length !== 14) || !isOnlyDigit) return { 'regonError': true };
 
-    let cd: number = 0; 
-    let w: Array<number>;
+    let sum: number = 0; 
+    let weight: Array<number>;
     
     if (regon.length === 9) {
-      w = [8, 9, 2, 3, 4, 5, 6, 7];
+      weight = [8, 9, 2, 3, 4, 5, 6, 7];
     } else {
-      w = [2, 4, 8, 5, 0, 9, 7, 3, 6, 1, 2, 4, 8];
+      weight = [2, 4, 8, 5, 0, 9, 7, 3, 6, 1, 2, 4, 8];
     }
     
     for (var i = 0; i < regon.length-1; i++) {
-      cd += w[i] * parseInt(regon.charAt(i));
+      sum += weight [i] * parseInt(regon.charAt(i));
     }
     
-    cd %= 11;
+    let resultControlNumber = sum % 11;
+    if (resultControlNumber === 10) resultControlNumber = 0;
     
-    if (cd === 10) cd = 0;
-    
-    if (cd !== parseInt(regon.charAt(regon.length - 1)) ) return { 'regonError': true };
+    const controlNumber = parseInt(regon.charAt(regon.length - 1));
+    if (resultControlNumber !== controlNumber) return { 'regonError': true };
   
+    return null;
+  }
+
+  private validateNip(control: FormControl): null | ValidationErrors {
+    if (!control.value) return null;
+    const nip: string = control.value.replace(/[\ \-]/gi, '');
+   
+    const isOnlyDigit: boolean = /^\d+$/.test(nip);  
+    if (nip.length !== 10 || !isOnlyDigit) return { 'nipError': true };
+
+    let sum: number = 0; 
+    let controlNumber = parseInt(nip.substring(9, 10));
+    const weight : Array<number> = [6, 5, 7, 2, 3, 4, 5, 6, 7];
+
+    for (let i = 0; i < weight.length; i++) {
+      sum += (parseInt(nip.substr(i, 1)) * weight[i]);
+    }
+    
+    const resultControlNumber = sum % 11;
+    if (resultControlNumber !== controlNumber) return { 'nipError': true };
+
     return null;
   }
 
