@@ -1,0 +1,14 @@
+<form [formGroup]="myFirstReactiveForm">
+  <label for="name">имя</label>
+  <input type="text" formControlName="name" />
+  <br /><br />
+
+  <label for="email">email</label>
+  <input type="text" formControlName="email" />
+  <br /><br />
+
+  <button type="submit">отправить</button>
+</form>
+<div>
+  {{ myFirstReactiveForm.value | json }}
+</div>

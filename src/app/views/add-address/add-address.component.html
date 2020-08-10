@@ -1,0 +1,52 @@
+
+<form [formGroup]="address" (ngSubmit)="addAddress()">
+  <h3 class="mx-3">Adres</h3>
+  <mat-form-field appearance="outline" class="col-12">
+    <mat-label>Nazwa typu adresu</mat-label>
+    <input type="text" matInput formControlName="addressType" />
+    <!-- <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error> -->
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="col-6">
+    <mat-label>Ulica</mat-label>
+    <input type="text" matInput formControlName="addressStreet" />
+    <!-- <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error> -->
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="col-3">
+    <mat-label>Nr domu</mat-label>
+    <input type="text" matInput formControlName="addressHome" />
+    <!-- <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error> -->
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="col-3">
+    <mat-label>Nr mieszkania</mat-label>
+    <input matInput formControlName="addressApartment" />
+    <!-- <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error> -->
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="col-3">
+    <mat-label>Kod pocztowy</mat-label>
+    <input [textMask]="{ mask: mask }" matInput formControlName="addressPostalCode" />
+    <!-- <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error> -->
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="col-9">
+    <mat-label type="text">Miasto</mat-label>
+    <input matInput formControlName="addressCity" />
+    <!-- <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error> -->
+  </mat-form-field>
+  <div class="col">
+    <div class="row justify-content-end">
+        <div class="row justify-content-around">
+          <button mat-raised-button [disabled]="address.invalid" type="submit" id="addressbtn">
+            <ng-container *ngIf="addresses.length == 0; else rr" >
+              Dodaj adres
+            </ng-container>
+            <ng-template #rr>
+              Dodaj kolejny adres
+            </ng-template>
+          </button>
+      </div>
+    </div>
+  </div>
+</form>
+<div>
+  {{ address.value | json }}
+</div>

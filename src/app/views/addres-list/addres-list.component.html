@@ -1,0 +1,12 @@
+<mat-card class="my-3">
+  
+  <div class="row">
+    <div class="col"><span>{{item.addressType}}</span><br>
+      <span>{{item.addressStreet}} {{item.addressHome}}/{{item.addressApartment}}</span><br>
+      <span>{{item.addressPostalCode}} {{item.addressCity}}</span></div>
+    
+  
+    <button class="col my-2 mx-4" mat-raised-button (click)="removed.emit($event)">Usuń</button>  
+  </div>
+ 
+</mat-card>
