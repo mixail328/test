@@ -128,7 +128,7 @@ export class AddContactComponent implements OnInit {
       name: [null],
       nip: [null, [Validators.required, this.validateNip]],
       regon: [null, [Validators.required, this.validateRegon]],
-      krs: [null],
+      krs: [null, [Validators.required, this.validateKrs]],
       legalForm: [null],
       email: [null],
       phone: [null],
@@ -207,6 +207,16 @@ export class AddContactComponent implements OnInit {
     
     const resultControlNumber = sum % 11;
     if (resultControlNumber !== controlNumber) return { 'nipError': true };
+
+    return null;
+  }
+
+  private validateKrs(control: FormControl): null | ValidationErrors {
+    if (!control.value) return null;
+    const krs: string = control.value;
+
+    const isOnlyDigit: boolean = /^\d+$/.test(krs);  
+    if (!isOnlyDigit) return { 'regonKsr': true };
 
     return null;
   }
