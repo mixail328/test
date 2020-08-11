@@ -31,7 +31,6 @@ export class AddContactComponent implements OnInit {
   contactType: boolean;
   stap1: boolean;
   wayValue: string;
-  selectedValuel;
   innemedia;
 
   media: SelectValues[] = [
@@ -122,7 +121,7 @@ export class AddContactComponent implements OnInit {
       ]),
     });
   }
-1
+
   companyFormInit(): void {
     this.newCompany = this.fb.group({
       name: [null],
@@ -139,6 +138,16 @@ export class AddContactComponent implements OnInit {
       address:  new FormArray([
       ]),
     });
+  }
+
+  selectedLegalForm(option) {
+    const legalForm: string = option.value;
+    
+    if (legalForm === 'inne') {
+      this.newCompany.addControl('otherLegalForm', new FormControl('I am working'));
+    } else if (this.newCompany.controls.hasOwnProperty('otherLegalForm')) {
+      this.newCompany.removeControl('otherLegalForm');
+    }
   }
 
   private markFormGroupTouched(formGroup: FormGroup) {
@@ -216,7 +225,7 @@ export class AddContactComponent implements OnInit {
     const krs: string = control.value;
 
     const isOnlyDigit: boolean = /^\d+$/.test(krs);  
-    if (!isOnlyDigit) return { 'regonKsr': true };
+    if (!isOnlyDigit) return { 'krsError': true };
 
     return null;
   }
